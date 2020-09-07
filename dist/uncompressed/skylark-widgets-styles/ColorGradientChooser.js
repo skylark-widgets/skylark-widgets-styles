@@ -193,7 +193,7 @@ define([
 
 			for(var i = 0; i < values.length; i++)
 			{
-				var color = new THREE.Color();
+				var color = new Color();
 				color.copy(values[i]);
 				this.values.push(color);
 			}
