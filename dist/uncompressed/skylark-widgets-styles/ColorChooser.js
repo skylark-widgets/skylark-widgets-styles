@@ -1,11 +1,24 @@
 define([
-	"skylark-domx-colors/colorer",
+	"skylark-langx/langx",
+    "skylark-domx-query",
+    "skylark-domx-eventer",
+    "skylark-domx-popups",
+	"skylark-graphics-color/Color",
+	"skylark-domx-colors/ColorPane",
 	"skylark-widgets-base/Widget",
-	"./styles"
+	"./styles",
+	"./colorpane.tpl"
 ],function(
-	colorer,
+	langx,
+	$,
+	eventer,
+	popups,
+
+	Color,
+	ColorPane,
 	Widget,
-	styles
+	styles,
+	colorPaneTbl
 ){
 	"use strict";
 
@@ -32,7 +45,78 @@ define([
 			 * @attribute color
 			 * @type {jscolor}
 			 */
-			 this.color = colorer(this._elm);
+
+
+			 var self = this;
+
+			 this.listenTo(this._velm,"change",function(){
+			 	self._value = Color.parse(self._velm.val());
+			 	self.emit("change",self._value);
+			 });
+
+			 this.listenTo(this._picker,"change",function(){
+			 	self._value = Color.parse(self._velm.val());
+			 	self.emit("change",self._value);
+			 });
+
+
+			 this.$pane = $(colorPaneTbl);
+			 $("body").append(this.$pane);
+			 this._picker = ColorPane.instantiate(this.$pane[0],{
+                //color : opts.color
+			    pane : {
+		            states : {
+		                showInput: false
+		            }            
+		        }					 	
+             });
+
+            var paneIsVisible = true;
+            function showPane() {
+                if (paneIsVisible) {
+                    return;
+                }
+               
+                paneIsVisible = true;
+
+                self.$pane.show();
+
+            	self.$pane.css("position", "absolute");
+                self.$pane.offset(popups.calcOffset(self.$pane[0], self._elm));
+                
+            }
+
+            function hidePane() {
+                if (!paneIsVisible) {
+                    return;
+                }
+                paneIsVisible = false;
+
+                self.$pane.hide();
+            }
+            hidePane();
+
+            this.listenTo(this._velm,"click touchstart", function (e) {
+                if (paneIsVisible) {
+                    hidePane();
+                } else {
+                    showPane();
+                }
+
+              eventer.stop(e);
+            });
+
+            this.listenTo(this._picker,"picked",(e,color) => {
+            	self._value = color;
+                self._velm.css("background-color", color.toRgbString());   
+                self._velm.val(color.toHexString());     
+                self.emit("change",color);       
+            });
+
+            this.listenTo(this._picker,"canceled choosed",(e) => {
+                hidePane();
+            });
+
 			/*
 			this.color = new jscolor(this.element);
 			this.color.backgroundColor = Editor.theme.boxColor;
@@ -59,7 +143,7 @@ define([
 		 * @param {Function} onChange
 		 */
 		setOnChange : function(onChange) {
-			this._elm.onchange = onChange;
+			this.on("change",this.onChange = onChange);
 		},
 
 		/**
@@ -70,41 +154,12 @@ define([
 		 * @param {Number} g
 		 * @param {Number} b
 		 */
-		setValue : function(r, g, b) {
+		setValue : function(v) {
 			//this.color.fromRGB(r * 255, g * 255, b * 255);
-			this.color.set({
-				r:r * 255,
-				g:g * 255,
-				b:b * 255
-			});
+			this._value = Color.parse(v);
+			this._velm.val(this._value.toHexString());
 		},
 
-		/**
-		 * Set value from numeric hex.
-		 *
-		 * @method setValueHex
-		 * @param {Number} hex
-		 */
-		setValueHex : function(hex) {
-			hex = Math.floor(hex);
-			//this.color.fromRGB(hex >> 16 & 255, hex >> 8 & 255, hex & 255);
-			this.color.set({
-				r:hex >> 16 & 255,
-				g:hex >> 8 & 255,
-				b:hex & 255
-			})
-		},
-
-		/**
-		 * Set value from CSS string.
-		 *
-		 * @method setValueString
-		 * @param {Number} color
-		 */
-		setValueString : function(color) {
-			//this.color.fromString(color);
-			this.color.set(color);
-		},
 
 		/**
 		 * Get color value HEX as string.
@@ -113,7 +168,7 @@ define([
 		 * @return {String} String hex color.
 		 */
 		getValueString : function(color) {
-			return this.color.toHEXString();
+			return this._value.toHexString();
 		},
 
 		/**
@@ -123,7 +178,7 @@ define([
 		 * @return {Object} Color object.
 		 */
 		getValue : function() {
-			return {r: this.color.rgb[0] / 255, g: this.color.rgb[1] / 255, b: this.color.rgb[2] / 255};
+			return this._value;
 		},
 
 		/**
@@ -133,7 +188,8 @@ define([
 		 * @return {Number} Numeric hex color.
 		 */
 		getValueHex : function() {
-			return (this.color.rgb[0] << 16 ^ this.color.rgb[1] << 8 ^ this.color.rgb[2] << 0);
+			//return this.color.get().toHex();
+			return this._value.toNumber();
 		}
 
 	}); 
