@@ -1,5 +1,5 @@
 define([
-	"skylark-graphics-color",
+	"skylark-graphics-colors/Color",
 	"skylark-domx-colors/colorer",	
 	"skylark-widgets-base/Widget",
 	"./styles"

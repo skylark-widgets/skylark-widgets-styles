@@ -3,7 +3,7 @@ define([
     "skylark-domx-query",
     "skylark-domx-eventer",
     "skylark-domx-popups",
-	"skylark-graphics-color/Color",
+	"skylark-graphics-colors/Color",
 	"skylark-domx-colors/ColorPane",
 	"skylark-widgets-base/Widget",
 	"./styles",
