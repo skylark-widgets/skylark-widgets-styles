@@ -1,6 +1,6 @@
 define([
 	"skylark-graphics-colors/Color",
-	"skylark-domx-colors/colorer",	
+	"skylark-domx-plugins-colors/colorer",	
 	"skylark-widgets-base/Widget",
 	"./styles"
 ],function(
