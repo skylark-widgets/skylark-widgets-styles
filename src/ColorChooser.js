@@ -2,9 +2,9 @@ define([
 	"skylark-langx/langx",
     "skylark-domx-query",
     "skylark-domx-eventer",
-    "skylark-domx-popups",
+    "skylark-domx-plugins-popups",
 	"skylark-graphics-colors/Color",
-	"skylark-domx-colors/ColorPane",
+	"skylark-domx-plugins-colors/ColorPane",
 	"skylark-widgets-base/Widget",
 	"./styles",
 	"./colorpane.tpl"
@@ -54,10 +54,6 @@ define([
 			 	self.emit("change",self._value);
 			 });
 
-			 this.listenTo(this._picker,"change",function(){
-			 	self._value = Color.parse(self._velm.val());
-			 	self.emit("change",self._value);
-			 });
 
 
 			 this.$pane = $(colorPaneTbl);
@@ -70,6 +66,12 @@ define([
 		            }            
 		        }					 	
              });
+
+			 this.listenTo(this._picker,"change",function(){
+			 	self._value = Color.parse(self._velm.val());
+			 	self.emit("change",self._value);
+			 });
+
 
             var paneIsVisible = true;
             function showPane() {
