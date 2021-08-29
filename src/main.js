@@ -1,7 +1,7 @@
 define([
 	"./styles",
-	"./ColorChooser",
-	"./ColorGradientChooser"
+	"./color-chooser",
+	"./color-gradient-chooser"
 ],function(styles){
 	return styles;
 });

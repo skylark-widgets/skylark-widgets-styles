@@ -5,7 +5,7 @@ define([
     "skylark-domx-plugins-popups",
 	"skylark-graphics-colors/Color",
 	"skylark-domx-plugins-colors/ColorPane",
-	"skylark-widgets-base/Widget",
+	"skylark-widgets-base/widget",
 	"./styles",
 	"./colorpane.tpl"
 ],function(
