@@ -1,7 +1,7 @@
 define([
-	"skylark-graphics-colors/Color",
+	"skylark-graphics-colors/color",
 	"skylark-domx-plugins-colors/colorer",	
-	"skylark-widgets-base/Widget",
+	"skylark-widgets-base/widget",
 	"./styles"
 ],function(
 	Color,

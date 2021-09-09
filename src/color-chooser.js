@@ -3,8 +3,8 @@ define([
     "skylark-domx-query",
     "skylark-domx-eventer",
     "skylark-domx-plugins-popups",
-	"skylark-graphics-colors/Color",
-	"skylark-domx-plugins-colors/ColorPane",
+	"skylark-graphics-colors/color",
+	"skylark-domx-plugins-colors/color-pane",
 	"skylark-widgets-base/widget",
 	"./styles",
 	"./colorpane.tpl"
